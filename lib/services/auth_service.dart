@@ -3,10 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthServices {
   login(String email, String password) async {
     try {
-      FirebaseAuth.instance
+      await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException {
-      throw Exception();
+      rethrow;
+    } catch (e) {
+      rethrow;
     }
   }
 
@@ -16,7 +18,9 @@ class AuthServices {
           email: email, password: password.toString());
       FirebaseAuth.instance.currentUser?.updateDisplayName(name);
     } on FirebaseAuthException {
-      throw Exception();
+      rethrow;
+    } catch (e) {
+      rethrow;
     }
   }
 }

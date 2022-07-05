@@ -4,7 +4,6 @@ import 'package:chat_app/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/injector.dart';
 import 'login_page.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -79,10 +78,6 @@ class SignUpPage extends StatelessWidget {
                           email: _emailController.text,
                           password: _emailController.text,
                           name: _nameController.text);
-                      si.util.showToast(context, 'Sign up Successful!');
-                    } else {
-                      si.util.showToast(
-                          context, 'check your connection and try again');
                     }
                   },
                 ),

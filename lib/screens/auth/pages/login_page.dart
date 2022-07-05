@@ -1,6 +1,8 @@
 import 'package:chat_app/core/shared_widgets/custom_button.dart';
 import 'package:chat_app/core/shared_widgets/custom_textfield.dart';
+import 'package:chat_app/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/injector.dart';
 import 'signup_page.dart';
@@ -18,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     TextEditingController _emailController = TextEditingController();
     TextEditingController _passwordController = TextEditingController();
-
+    final authProvider = Provider.of<AuthProvider>(context);
     return Scaffold(
       body: Form(
         key: _loginFormKey,
@@ -71,13 +73,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 name: 'Log In',
                 onTap: () async {
                   if (_loginFormKey.currentState!.validate()) {
-                    try {
-                      await si.authServices.login(
-                          _emailController.text, _passwordController.text);
-                      si.util.showToast(context, 'Log In Successful');
-                    } on Exception {
-                      si.util.showToast(context, 'shit');
-                    }
+                    await authProvider.login(
+                        email: _emailController.text,
+                        password: _passwordController.text);
                   }
                 },
               ),

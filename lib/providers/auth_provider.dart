@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../core/injector.dart';
 
@@ -21,21 +23,29 @@ class AuthProvider extends ChangeNotifier {
 
   signUp(
       {required String email, required String password, String? name}) async {
-    setLoading(true);
     try {
+      setLoading(true);
       await si.authServices.signUp(email, password, name);
-    } on Exception {
-      setError(true);
+      setLoading(false);
+      Fluttertoast.showToast(msg: 'sign up successful');
+    } on FirebaseAuthException catch (e) {
+      Fluttertoast.showToast(msg: e.message!);
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'oops check your connection');
     }
-    setLoading(false);
+    notifyListeners();
   }
 
   login({required String email, required String password}) async {
-    setLoading(true);
     try {
+      setLoading(true);
       await si.authServices.login(email, password);
-    } on Exception {
-      setError(true);
+      setLoading(false);
+      Fluttertoast.showToast(msg: 'sign up successful');
+    } on FirebaseAuthException catch (e) {
+      Fluttertoast.showToast(msg: e.message!);
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'oops check your connection');
     }
   }
 }
