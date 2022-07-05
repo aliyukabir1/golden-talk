@@ -26,6 +26,7 @@ class SignUpPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                SizedBox(height: MediaQuery.of(context).size.height * 0.2),
                 const Center(
                   child: Text(
                     'Welcome to Aliyos Chat',
@@ -73,6 +74,7 @@ class SignUpPage extends StatelessWidget {
                 CustomButton(
                   name: 'Sign Up',
                   onTap: () async {
+                    FocusManager.instance.primaryFocus?.unfocus();
                     if (_signUpFormKey.currentState!.validate()) {
                       await authProvider.signUp(
                           email: _emailController.text,

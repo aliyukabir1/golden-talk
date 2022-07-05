@@ -1,9 +1,8 @@
 import 'package:chat_app/providers/auth_provider.dart';
+import 'package:chat_app/screens/splash/splash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'screens/auth/pages/login_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +27,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.orange,
           ),
-          home: const LoginScreen()),
+          home: const SplashScreen()),
     );
   }
 }

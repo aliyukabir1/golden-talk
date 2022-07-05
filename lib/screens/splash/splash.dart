@@ -1,4 +1,8 @@
+import 'package:chat_app/providers/auth_provider.dart';
+import 'package:chat_app/screens/auth/pages/login_page.dart';
+import 'package:chat_app/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -8,6 +12,24 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SpachScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    Future.delayed(const Duration(seconds: 5), (() => checkSignedIn()));
+    super.initState();
+  }
+
+  void checkSignedIn() {
+    AuthProvider authProvider = context.read<AuthProvider>();
+    bool isLoggedIn = authProvider.isLoggedIn();
+    if (isLoggedIn) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+      return;
+    }
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
