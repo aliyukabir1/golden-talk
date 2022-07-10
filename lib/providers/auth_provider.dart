@@ -1,4 +1,5 @@
 import 'package:chat_app/screens/home/home_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -27,6 +28,15 @@ class AuthProvider extends ChangeNotifier {
     try {
       setLoading(true);
       await si.authServices.signUp(email, password, name);
+      final id = getCurrentUserId();
+      FirebaseFirestore.instance.collection('users').doc(id).set({
+        "name": name!,
+        'email': email,
+        'uid': id,
+        'photoUrl': '',
+        'phoneNumber': '',
+        'aboutMe': ''
+      });
       setLoading(false);
       Fluttertoast.showToast(msg: 'sign up successful');
     } on FirebaseAuthException catch (e) {
@@ -59,5 +69,9 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
+  }
+
+  String getCurrentUserId() {
+    return FirebaseAuth.instance.currentUser!.uid;
   }
 }

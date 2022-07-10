@@ -1,4 +1,5 @@
 import 'package:chat_app/providers/auth_provider.dart';
+import 'package:chat_app/providers/home_provider.dart';
 import 'package:chat_app/screens/splash/splash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -13,16 +14,18 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthProvider>(
-            create: (context) => AuthProvider())
+            create: (context) => AuthProvider()),
+        Provider<HomeProvider>(
+          create: (context) => HomeProvider(),
+        )
       ],
       child: MaterialApp(
-          title: 'Flutter Demo',
+          title: 'Golden Chat',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             primarySwatch: Colors.orange,
