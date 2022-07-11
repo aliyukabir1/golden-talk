@@ -14,8 +14,8 @@ class AuthServices {
 
   signUp(String email, String password, String? name) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: email, password: password.toString());
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
       FirebaseAuth.instance.currentUser?.updateDisplayName(name);
     } on FirebaseAuthException {
       rethrow;

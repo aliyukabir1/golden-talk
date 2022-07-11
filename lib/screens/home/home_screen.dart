@@ -12,19 +12,16 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final homeProvider = context.read<HomeProvider>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Golden Chat'),
         centerTitle: true,
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
           IconButton(
-              onPressed: () async {
-                await context.read<AuthProvider>().signOut();
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LoginScreen()));
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (con) => const PopUp()));
               },
               icon: const Icon(Icons.exit_to_app))
         ],
@@ -55,22 +52,6 @@ class HomeScreen extends StatelessWidget {
                             height: 1,
                           ),
                       itemCount: data.length),
-                  // child: Column(
-                  //   children: const [
-                  //     ListTile(
-                  //       leading: CircleAvatar(backgroundColor: Colors.purple),
-                  //       title: Text('Aliyos Himself'),
-                  //       subtitle: Text('we Got to talk'),
-                  //       trailing: Text('yesterday'),
-                  //     ),
-                  //     ListTile(
-                  //       leading: CircleAvatar(backgroundColor: Colors.purple),
-                  //       title: Text('Aliyos Himself'),
-                  //       subtitle: Text('we Got to talk'),
-                  //       trailing: Text('yesterday'),
-                  //     ),
-                  //   ],
-                  // ),
                 ));
               } else {
                 return const Center(
@@ -80,6 +61,36 @@ class HomeScreen extends StatelessWidget {
             }
             return const Center(child: CircularProgressIndicator());
           }),
+    );
+  }
+}
+
+class PopUp extends StatelessWidget {
+  const PopUp({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Log Out'),
+      content: const Text('Are you sure you want to log out?'),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('CANCEL'),
+        ),
+        TextButton(
+          onPressed: () async {
+            await context.read<AuthProvider>().signOut();
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()));
+          },
+          child: const Text('ACCEPT'),
+        ),
+      ],
     );
   }
 }
