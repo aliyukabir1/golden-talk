@@ -1,6 +1,7 @@
 import 'package:chat_app/core/shared_widgets/custom_button.dart';
 import 'package:chat_app/core/shared_widgets/custom_textfield.dart';
 import 'package:chat_app/providers/auth_provider.dart';
+import 'package:chat_app/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,8 +19,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final _loginFormKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    TextEditingController _emailController = TextEditingController();
-    TextEditingController _passwordController = TextEditingController();
+    TextEditingController emailController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
     final authProvider = Provider.of<AuthProvider>(context);
     return Scaffold(
       body: SingleChildScrollView(
@@ -52,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 40),
                 CustomTextField(
-                  controller: _emailController,
+                  controller: emailController,
                   hintText: 'Email',
                   validator: (value) {
                     return si.validator.emailValidator(value);
@@ -60,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 25),
                 CustomTextField(
-                  controller: _passwordController,
+                  controller: passwordController,
                   hintText: "Password",
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -75,9 +76,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   onTap: () async {
                     FocusManager.instance.primaryFocus?.unfocus();
                     if (_loginFormKey.currentState!.validate()) {
-                      await authProvider.login(context,
-                          email: _emailController.text,
-                          password: _passwordController.text);
+                      authProvider
+                          .login(
+                              email: emailController.text,
+                              password: passwordController.text)
+                          .then(() => Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const HomeScreen())));
                     }
                   },
                 ),

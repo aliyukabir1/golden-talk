@@ -1,4 +1,3 @@
-import 'package:chat_app/screens/home/home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -47,15 +46,12 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  login(BuildContext context,
-      {required String email, required String password}) async {
+  login({required String email, required String password}) async {
     try {
       setLoading(true);
       await si.authServices.login(email, password);
       setLoading(false);
       Fluttertoast.showToast(msg: 'sign up successful');
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const HomeScreen()));
     } on FirebaseAuthException catch (e) {
       Fluttertoast.showToast(msg: e.message!);
     } catch (e) {

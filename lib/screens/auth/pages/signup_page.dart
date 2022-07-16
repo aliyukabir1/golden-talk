@@ -11,9 +11,9 @@ class SignUpPage extends StatelessWidget {
   final _signUpFormKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    TextEditingController _emailController = TextEditingController();
-    TextEditingController _passwordController = TextEditingController();
-    TextEditingController? _nameController = TextEditingController();
+    TextEditingController emailController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+    TextEditingController? nameController = TextEditingController();
     final authProvider = Provider.of<AuthProvider>(context);
 
     return Scaffold(
@@ -47,10 +47,10 @@ class SignUpPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 40),
-                CustomTextField(controller: _nameController, hintText: 'Name'),
+                CustomTextField(controller: nameController, hintText: 'Name'),
                 const SizedBox(height: 25),
                 CustomTextField(
-                  controller: _emailController,
+                  controller: emailController,
                   hintText: 'Email',
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -61,7 +61,7 @@ class SignUpPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 25),
                 CustomTextField(
-                  controller: _passwordController,
+                  controller: passwordController,
                   hintText: "Password",
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -77,9 +77,9 @@ class SignUpPage extends StatelessWidget {
                     FocusManager.instance.primaryFocus?.unfocus();
                     if (_signUpFormKey.currentState!.validate()) {
                       await authProvider.signUp(
-                          email: _emailController.text,
-                          password: _emailController.text,
-                          name: _nameController.text);
+                          email: emailController.text,
+                          password: emailController.text,
+                          name: nameController.text);
                     }
                   },
                 ),

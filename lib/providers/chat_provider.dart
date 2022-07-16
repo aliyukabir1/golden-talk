@@ -1,15 +1,18 @@
+import 'dart:io';
+
 import 'package:chat_app/models/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ChatProvider {
   final instance = FirebaseFirestore.instance;
-  // final firebaseStorage = FirebaseStorage.instance;
-  void sendChat(
+  final firebaseStorage = FirebaseStorage.instance;
+  Future<void> sendChat(
       {required String content,
       required int type,
       required String groupChatId,
       required String currentUserId,
-      required String peerUserId}) {
+      required String peerUserId}) async {
     DocumentReference ref = instance
         .collection('chats')
         .doc(groupChatId)
@@ -22,8 +25,8 @@ class ChatProvider {
         content: content,
         type: type);
 
-    FirebaseFirestore.instance
-        .runTransaction((transaction) async => transaction.set(ref, message));
+    await FirebaseFirestore.instance.runTransaction(
+        (transaction) async => transaction.set(ref, message.toJson()));
   }
 
   Stream<QuerySnapshot> getMessages(
@@ -37,16 +40,16 @@ class ChatProvider {
         .snapshots();
   }
 
-  Future<void> updateFirestoreData(
-      String collectionPath, String docPath, Map<String, dynamic> dataUpdate) {
-    return instance.collection(collectionPath).doc(docPath).update(dataUpdate);
+  UploadTask uploadImageFile(File image, String filename) {
+    Reference reference = firebaseStorage.ref().child(filename);
+    UploadTask uploadTask = reference.putFile(image);
+    return uploadTask;
   }
 
-  // UploadTask uploadImageFile(File image, String filename) {
-  //   Reference reference = firebaseStorage.ref().child(filename);
-  //   UploadTask uploadTask = reference.putFile(image);
-  //   return uploadTask;
-  // }
+  Future<void> updateFirestoreData(
+      Map<String, dynamic> data, String docPath) async {
+    return await instance.collection('chats').doc(docPath).update(data);
+  }
 }
 
 class MessageType {

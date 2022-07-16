@@ -1,4 +1,5 @@
 import 'package:chat_app/providers/auth_provider.dart';
+import 'package:chat_app/providers/chat_provider.dart';
 import 'package:chat_app/providers/home_provider.dart';
 import 'package:chat_app/screens/splash/splash.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,6 +23,9 @@ class MyApp extends StatelessWidget {
             create: (context) => AuthProvider()),
         Provider<HomeProvider>(
           create: (context) => HomeProvider(),
+        ),
+        Provider<ChatProvider>(
+          create: (context) => ChatProvider(),
         )
       ],
       child: MaterialApp(

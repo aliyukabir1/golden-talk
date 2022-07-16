@@ -2,6 +2,7 @@ import 'package:chat_app/models/user.dart';
 import 'package:chat_app/providers/auth_provider.dart';
 import 'package:chat_app/providers/home_provider.dart';
 import 'package:chat_app/screens/auth/pages/login_page.dart';
+import 'package:chat_app/screens/chat_message/chat_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -41,6 +42,16 @@ class HomeScreen extends StatelessWidget {
                         data[index];
                         final user = User.fromDocument(data[index]);
                         return ListTile(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ChatScreen(
+                                          otherUserAvatar: user.photoUrl,
+                                          otherUserId: user.uid,
+                                          otherUserName: user.name,
+                                        )));
+                          },
                           leading: const CircleAvatar(
                               backgroundColor: Colors.purple),
                           title: Text(user.name),
@@ -83,10 +94,12 @@ class PopUp extends StatelessWidget {
           child: const Text('CANCEL'),
         ),
         TextButton(
-          onPressed: () async {
-            await context.read<AuthProvider>().signOut();
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const LoginScreen()));
+          onPressed: () {
+            context.read<AuthProvider>().signOut().then((value) =>
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoginScreen())));
           },
           child: const Text('ACCEPT'),
         ),
