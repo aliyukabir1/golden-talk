@@ -1,8 +1,11 @@
+import 'package:chat_app/models/message.dart';
 import "package:flutter/material.dart";
 
 class LeftTextDisplay extends StatelessWidget {
+  final Message message;
   const LeftTextDisplay({
     Key? key,
+    required this.message,
   }) : super(key: key);
 
   @override
@@ -22,9 +25,9 @@ class LeftTextDisplay extends StatelessWidget {
                   topEnd: Radius.circular(15),
                   bottomEnd: Radius.circular(15),
                   topStart: Radius.circular(15))),
-          child: const Text(
-            'What are you doing ? i have been trynna reach you no luck',
-            style: TextStyle(color: Colors.white),
+          child: Text(
+            message.content,
+            style: const TextStyle(color: Colors.white),
           ),
         )
       ],

@@ -1,7 +1,9 @@
-import 'package:chat_app/core/shared_widgets/custom_textfield.dart';
+import 'package:chat_app/models/message.dart';
 import 'package:chat_app/providers/auth_provider.dart';
 import 'package:chat_app/screens/chat_message/components/left_text.dart';
+import 'package:chat_app/screens/chat_message/components/message_input.dart';
 import 'package:chat_app/screens/chat_message/components/right_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -54,60 +56,31 @@ class _ChatScreenState extends State<ChatScreen> {
         child: Column(
           children: [
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: const [LeftTextDisplay(), RightTextDisPlay()],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 50,
-              width: double.infinity,
-              child: Row(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(right: 20),
-                    decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.circular(25)),
-                    child: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.camera_alt,
-                          size: 20,
-                        )),
-                  ),
-                  Flexible(
-                      child: CustomTextField(
-                    hintText: 'Type here',
-                    controller: textController,
-                  )),
-                  Container(
-                    margin: const EdgeInsets.only(left: 20),
-                    decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.circular(25)),
-                    child: IconButton(
-                        onPressed: () async {
-                          final content = textController.text;
-                          if (content.trim().isNotEmpty) {
-                            textController.clear();
-                            await chatProvider.sendChat(
-                                content: content,
-                                type: 0,
-                                groupChatId: groupChatId,
-                                currentUserId: currentUserId,
-                                peerUserId: widget.otherUserId);
-                          }
-                        },
-                        icon: const Icon(
-                          Icons.send_rounded,
-                          size: 20,
-                        )),
-                  ),
-                ],
-              ),
-            )
+                child: SingleChildScrollView(
+                    child: StreamBuilder<QuerySnapshot>(
+                        stream: chatProvider.getMessages(
+                            groupChatId: groupChatId, limit: 20),
+                        builder: (context, snapshot) {
+                          return ListView.builder(
+                              itemBuilder: (context, index) {
+                            if (snapshot.hasData) {
+                              final messageList = snapshot.data!.docs;
+                              Message message =
+                                  Message.fromDocument(messageList[index]);
+                              if (message.idFrom == currentUserId) {
+                                return RightTextDisPlay(message: message);
+                              }
+                              return LeftTextDisplay(message: message);
+                            }
+                            return const Center(child: Text('no messages'));
+                          });
+                        }))),
+            MessageInput(
+                textController: textController,
+                chatProvider: chatProvider,
+                groupChatId: groupChatId,
+                currentUserId: currentUserId,
+                widget: widget)
           ],
         ),
       ),

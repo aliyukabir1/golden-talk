@@ -1,7 +1,10 @@
+import 'package:chat_app/models/message.dart';
 import 'package:flutter/material.dart';
 
 class RightTextDisPlay extends StatelessWidget {
-  const RightTextDisPlay({Key? key}) : super(key: key);
+  final Message message;
+
+  const RightTextDisPlay({Key? key, required this.message}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +21,9 @@ class RightTextDisPlay extends StatelessWidget {
                   topEnd: Radius.circular(15),
                   bottomStart: Radius.circular(15),
                   topStart: Radius.circular(15))),
-          child: const Text(
-            'I was really busy, i will catch up to you later...',
-            style: TextStyle(color: Colors.white),
+          child: Text(
+            message.content,
+            style: const TextStyle(color: Colors.white),
           ),
         ),
         const SizedBox(width: 10),
