@@ -22,7 +22,7 @@ class MessageInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 50,
+      height: 70,
       width: double.infinity,
       child: Row(
         children: [

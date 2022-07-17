@@ -61,19 +61,22 @@ class _ChatScreenState extends State<ChatScreen> {
                         stream: chatProvider.getMessages(
                             groupChatId: groupChatId, limit: 20),
                         builder: (context, snapshot) {
+                          int itemCount = snapshot.data?.docs.length ?? 0;
                           return ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: itemCount,
                               itemBuilder: (context, index) {
-                            if (snapshot.hasData) {
-                              final messageList = snapshot.data!.docs;
-                              Message message =
-                                  Message.fromDocument(messageList[index]);
-                              if (message.idFrom == currentUserId) {
-                                return RightTextDisPlay(message: message);
-                              }
-                              return LeftTextDisplay(message: message);
-                            }
-                            return const Center(child: Text('no messages'));
-                          });
+                                if (snapshot.hasData) {
+                                  final messageList = snapshot.data!.docs;
+                                  Message message =
+                                      Message.fromDocument(messageList[index]);
+                                  if (message.idFrom == currentUserId) {
+                                    return RightTextDisPlay(message: message);
+                                  }
+                                  return LeftTextDisplay(message: message);
+                                }
+                                return const Center(child: Text('no messages'));
+                              });
                         }))),
             MessageInput(
                 textController: textController,
