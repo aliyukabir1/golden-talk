@@ -16,20 +16,24 @@ class LeftTextDisplay extends StatelessWidget {
         const CircleAvatar(backgroundColor: Colors.red),
         const SizedBox(width: 10),
         Container(
-          margin: const EdgeInsets.all(10),
-          padding: const EdgeInsets.all(20),
-          width: MediaQuery.of(context).size.width * 0.55,
-          decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 4, 77, 7),
-              borderRadius: BorderRadiusDirectional.only(
-                  topEnd: Radius.circular(15),
-                  bottomEnd: Radius.circular(15),
-                  topStart: Radius.circular(15))),
-          child: Text(
-            message.content,
-            style: const TextStyle(color: Colors.white),
-          ),
-        )
+            margin: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(20),
+            width: MediaQuery.of(context).size.width * 0.55,
+            decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 4, 77, 7),
+                borderRadius: BorderRadiusDirectional.only(
+                    topEnd: Radius.circular(15),
+                    bottomEnd: Radius.circular(15),
+                    topStart: Radius.circular(15))),
+            child: message.type == 0
+                ? Text(
+                    message.content,
+                    style: const TextStyle(color: Colors.white),
+                  )
+                : Image.network(
+                    message.content,
+                    width: 150,
+                  ))
       ],
     );
   }

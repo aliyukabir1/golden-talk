@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final homeProvider = context.read<HomeProvider>();
-
+    final authProvider = context.read<AuthProvider>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Golden Chat'),
@@ -41,23 +41,26 @@ class HomeScreen extends StatelessWidget {
                       itemBuilder: (_, index) {
                         data[index];
                         final user = User.fromDocument(data[index]);
-                        return ListTile(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ChatScreen(
-                                          otherUserAvatar: user.photoUrl,
-                                          otherUserId: user.uid,
-                                          otherUserName: user.name,
-                                        )));
-                          },
-                          leading: const CircleAvatar(
-                              backgroundColor: Colors.purple),
-                          title: Text(user.name),
-                          subtitle: const Text('we Got to talk'),
-                          trailing: const Text('yesterday'),
-                        );
+                        if (user.uid != authProvider.getCurrentUserId()) {
+                          return ListTile(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ChatScreen(
+                                            otherUserAvatar: user.photoUrl,
+                                            otherUserId: user.uid,
+                                            otherUserName: user.name,
+                                          )));
+                            },
+                            leading: const CircleAvatar(
+                                backgroundColor: Colors.purple),
+                            title: Text(user.name),
+                            subtitle: const Text('we Got to talk'),
+                            trailing: const Text('yesterday'),
+                          );
+                        }
+                        return const SizedBox.shrink();
                       },
                       separatorBuilder: (_, index) => const Divider(
                             height: 1,

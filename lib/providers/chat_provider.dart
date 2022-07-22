@@ -40,10 +40,12 @@ class ChatProvider {
         .snapshots();
   }
 
-  UploadTask uploadImageFile(File image, String filename) {
-    Reference reference = firebaseStorage.ref().child(filename);
-    UploadTask uploadTask = reference.putFile(image);
-    return uploadTask;
+  uploadImageFile(File image, String filename) async {
+    final reference = await firebaseStorage
+        .ref('image')
+        .putFile(image)
+        .then((p0) => p0.ref.getDownloadURL());
+    return reference;
   }
 
   Future<void> updateFirestoreData(

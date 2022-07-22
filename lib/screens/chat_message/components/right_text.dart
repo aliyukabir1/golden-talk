@@ -12,20 +12,24 @@ class RightTextDisPlay extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Container(
-          margin: const EdgeInsets.all(10),
-          padding: const EdgeInsets.all(20),
-          width: MediaQuery.of(context).size.width * 0.55,
-          decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 8, 58, 99),
-              borderRadius: BorderRadiusDirectional.only(
-                  topEnd: Radius.circular(15),
-                  bottomStart: Radius.circular(15),
-                  topStart: Radius.circular(15))),
-          child: Text(
-            message.content,
-            style: const TextStyle(color: Colors.white),
-          ),
-        ),
+            margin: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(20),
+            width: MediaQuery.of(context).size.width * 0.55,
+            decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 8, 58, 99),
+                borderRadius: BorderRadiusDirectional.only(
+                    topEnd: Radius.circular(15),
+                    bottomStart: Radius.circular(15),
+                    topStart: Radius.circular(15))),
+            child: message.type == 0
+                ? Text(
+                    message.content,
+                    style: const TextStyle(color: Colors.white),
+                  )
+                : Image.network(
+                    message.content,
+                    width: 150,
+                  )),
         const SizedBox(width: 10),
         const CircleAvatar(backgroundColor: Colors.red),
       ],
