@@ -1,14 +1,24 @@
 import 'package:chat_app/core/shared_widgets/custom_button.dart';
 import 'package:chat_app/core/shared_widgets/custom_textfield.dart';
 import 'package:chat_app/providers/auth_provider.dart';
+import 'package:chat_app/screens/home/home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import 'login_page.dart';
 
-class SignUpPage extends StatelessWidget {
-  SignUpPage({Key? key}) : super(key: key);
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({Key? key}) : super(key: key);
+
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
   final _signUpFormKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     TextEditingController emailController = TextEditingController();
@@ -76,10 +86,21 @@ class SignUpPage extends StatelessWidget {
                   onTap: () async {
                     FocusManager.instance.primaryFocus?.unfocus();
                     if (_signUpFormKey.currentState!.validate()) {
-                      await authProvider.signUp(
-                          email: emailController.text,
-                          password: emailController.text,
-                          name: nameController.text);
+                      try {
+                        await authProvider.signUp(
+                            email: emailController.text,
+                            password: emailController.text,
+                            name: nameController.text);
+                        if (!mounted) return;
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HomeScreen()));
+                      } on FirebaseAuthException catch (e) {
+                        Fluttertoast.showToast(msg: e.message!);
+                      } catch (e) {
+                        Fluttertoast.showToast(msg: e.toString());
+                      }
                     }
                   },
                 ),

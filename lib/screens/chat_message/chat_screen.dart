@@ -29,7 +29,7 @@ class _ChatScreenState extends State<ChatScreen> {
   late AuthProvider authProvider;
   late String currentUserId;
   late String groupChatId;
-  ScrollController scrollController = ScrollController();
+  ScrollController? scrollController = ScrollController();
   @override
   void initState() {
     chatProvider = context.read<ChatProvider>();
@@ -62,11 +62,11 @@ class _ChatScreenState extends State<ChatScreen> {
                     builder: (context, snapshot) {
                       int itemCount = snapshot.data?.docs.length ?? 0;
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                        if (scrollController.hasClients) {
+                        if (scrollController!.hasClients) {
                           Future.delayed(
-                              const Duration(seconds: 3),
-                              (() => scrollController.jumpTo(
-                                  scrollController.position.maxScrollExtent)));
+                              const Duration(seconds: 2),
+                              (() => scrollController!.jumpTo(
+                                  scrollController!.position.maxScrollExtent)));
                         }
                       });
                       return ListView.builder(

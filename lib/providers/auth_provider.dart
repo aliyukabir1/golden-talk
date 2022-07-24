@@ -3,8 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../core/injector.dart';
-
 class AuthProvider extends ChangeNotifier {
   bool _isLoading = false;
   bool _isError = false;
@@ -26,7 +24,8 @@ class AuthProvider extends ChangeNotifier {
       {required String email, required String password, String? name}) async {
     try {
       setLoading(true);
-      await si.authServices.signUp(email, password, name);
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
       final id = getCurrentUserId();
       FirebaseFirestore.instance.collection('users').doc(id).set({
         "name": name!,
@@ -38,10 +37,12 @@ class AuthProvider extends ChangeNotifier {
       });
       setLoading(false);
       Fluttertoast.showToast(msg: 'sign up successful');
-    } on FirebaseAuthException catch (e) {
-      Fluttertoast.showToast(msg: e.message!);
+    } on FirebaseAuthException {
+      rethrow;
+      //  Fluttertoast.showToast(msg: e.message!);
     } catch (e) {
-      Fluttertoast.showToast(msg: 'oops check your connection');
+      rethrow;
+      //   Fluttertoast.showToast(msg: 'oops check your connection');
     }
     notifyListeners();
   }
@@ -49,13 +50,14 @@ class AuthProvider extends ChangeNotifier {
   login({required String email, required String password}) async {
     try {
       setLoading(true);
-      await si.authServices.login(email, password);
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
       setLoading(false);
-      Fluttertoast.showToast(msg: 'sign up successful');
-    } on FirebaseAuthException catch (e) {
-      Fluttertoast.showToast(msg: e.message!);
+      Fluttertoast.showToast(msg: 'log in up successful');
+    } on FirebaseAuthException {
+      rethrow;
     } catch (e) {
-      Fluttertoast.showToast(msg: 'oops check your connection');
+      rethrow;
     }
   }
 

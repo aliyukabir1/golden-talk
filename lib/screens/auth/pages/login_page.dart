@@ -2,7 +2,9 @@ import 'package:chat_app/core/shared_widgets/custom_button.dart';
 import 'package:chat_app/core/shared_widgets/custom_textfield.dart';
 import 'package:chat_app/providers/auth_provider.dart';
 import 'package:chat_app/screens/home/home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/injector.dart';
@@ -17,10 +19,10 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _loginFormKey = GlobalKey<FormState>();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    TextEditingController emailController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
     final authProvider = Provider.of<AuthProvider>(context);
     return Scaffold(
       body: SingleChildScrollView(
@@ -76,14 +78,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   onTap: () async {
                     FocusManager.instance.primaryFocus?.unfocus();
                     if (_loginFormKey.currentState!.validate()) {
-                      authProvider
-                          .login(
-                              email: emailController.text,
-                              password: passwordController.text)
-                          .then(() => Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const HomeScreen())));
+                      try {
+                        await authProvider.login(
+                            email: emailController.text,
+                            password: passwordController.text);
+                        if (!mounted) return;
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const HomeScreen()));
+                      } on FirebaseAuthException catch (e) {
+                        Fluttertoast.showToast(msg: e.message!);
+                      } catch (e) {
+                        Fluttertoast.showToast(
+                            msg: 'check internet connection and try again');
+                      }
                     }
                   },
                 ),
@@ -97,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => SignUpPage()));
+                                  builder: (context) => const SignUpPage()));
                         },
                         child: const Text(
                           'click here',
