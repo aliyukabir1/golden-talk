@@ -7,6 +7,8 @@ class AuthProvider extends ChangeNotifier {
   bool _isLoading = false;
   bool _isError = false;
 
+  final instance = FirebaseAuth.instance;
+
   bool get isLoading => _isLoading;
   bool get isError => _isError;
 
@@ -24,8 +26,8 @@ class AuthProvider extends ChangeNotifier {
       {required String email, required String password, String? name}) async {
     try {
       setLoading(true);
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
+      await instance.createUserWithEmailAndPassword(
+          email: email, password: password);
       final id = getCurrentUserId();
       FirebaseFirestore.instance.collection('users').doc(id).set({
         "name": name!,
@@ -50,8 +52,8 @@ class AuthProvider extends ChangeNotifier {
   login({required String email, required String password}) async {
     try {
       setLoading(true);
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+      await instance.signInWithEmailAndPassword(
+          email: email, password: password);
       setLoading(false);
       Fluttertoast.showToast(msg: 'log in up successful');
     } on FirebaseAuthException {
@@ -62,14 +64,20 @@ class AuthProvider extends ChangeNotifier {
   }
 
   bool isLoggedIn() {
-    return FirebaseAuth.instance.currentUser != null ? true : false;
+    return instance.currentUser != null ? true : false;
   }
 
   Future<void> signOut() async {
-    await FirebaseAuth.instance.signOut();
+    await instance.signOut();
   }
 
   String getCurrentUserId() {
-    return FirebaseAuth.instance.currentUser!.uid;
+    return instance.currentUser!.uid;
+  }
+
+  Future<DocumentSnapshot> getCurrentUserInfo() async {
+    final id = getCurrentUserId();
+    final data = FirebaseFirestore.instance.collection('users').doc(id).get();
+    return data;
   }
 }

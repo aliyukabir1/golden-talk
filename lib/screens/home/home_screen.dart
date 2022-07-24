@@ -4,6 +4,7 @@ import 'package:chat_app/providers/home_provider.dart';
 import 'package:chat_app/screens/auth/pages/login_page.dart';
 import 'package:chat_app/screens/chat_message/chat_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +15,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final homeProvider = context.read<HomeProvider>();
     final authProvider = context.read<AuthProvider>();
+    final auth = FirebaseAuth.instance;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Golden Chat'),
@@ -40,7 +42,7 @@ class HomeScreen extends StatelessWidget {
                       shrinkWrap: true,
                       itemBuilder: (_, index) {
                         data[index];
-                        final user = User.fromDocument(data[index]);
+                        final user = UserModel.fromDocument(data[index]);
                         if (user.uid != authProvider.getCurrentUserId()) {
                           return ListTile(
                             onTap: () {
@@ -50,12 +52,17 @@ class HomeScreen extends StatelessWidget {
                                       builder: (context) => ChatScreen(
                                             otherUserAvatar: user.photoUrl,
                                             otherUserId: user.uid,
-                                            otherUserName: user.name,
+                                            otherUserName: user.name == ''
+                                                ? auth.currentUser!.email
+                                                    as String
+                                                : user.name,
                                           )));
                             },
                             leading: const CircleAvatar(
                                 backgroundColor: Colors.purple),
-                            title: Text(user.name),
+                            title: Text(user.name == ''
+                                ? auth.currentUser!.email as String
+                                : user.name),
                             subtitle: const Text('we Got to talk'),
                             trailing: const Text('yesterday'),
                           );

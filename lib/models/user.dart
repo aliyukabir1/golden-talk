@@ -1,23 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class User {
+class UserModel {
   final String uid, name, aboutMe, phoneNumber, photoUrl;
 
-  User(
+  UserModel(
       {required this.photoUrl,
       required this.uid,
       required this.name,
       required this.aboutMe,
       required this.phoneNumber});
 
-  factory User.fromDocument(DocumentSnapshot snapshot) {
+  factory UserModel.fromDocument(DocumentSnapshot snapshot) {
     String photoUrl, uid, name, aboutMe, phoneNumber = '';
     photoUrl = snapshot.get('photoUrl');
     uid = snapshot.get('uid');
     name = snapshot.get('name');
     aboutMe = snapshot.get('aboutMe');
     phoneNumber = snapshot.get('phoneNumber');
-    return User(
+    return UserModel(
         uid: uid,
         name: name,
         aboutMe: aboutMe,
@@ -40,7 +40,7 @@ class User {
       String? aboutMe,
       String? phoneNumber,
       String? photoUrl}) {
-    return User(
+    return UserModel(
         photoUrl: photoUrl ?? this.photoUrl,
         uid: uid ?? this.uid,
         name: name ?? this.name,
