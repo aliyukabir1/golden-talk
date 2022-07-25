@@ -76,7 +76,7 @@ class ProfileScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10)),
                       child: Center(
                         child: Text(
-                          user.aboutMe == '' ? 'null' : 'dd',
+                          user.aboutMe ?? 'null',
                           style: const TextStyle(fontSize: 17),
                         ),
                       ),

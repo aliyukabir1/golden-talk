@@ -41,10 +41,8 @@ class AuthProvider extends ChangeNotifier {
       Fluttertoast.showToast(msg: 'sign up successful');
     } on FirebaseAuthException {
       rethrow;
-      //  Fluttertoast.showToast(msg: e.message!);
     } catch (e) {
       rethrow;
-      //   Fluttertoast.showToast(msg: 'oops check your connection');
     }
     notifyListeners();
   }

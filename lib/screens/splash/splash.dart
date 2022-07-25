@@ -1,6 +1,6 @@
 import 'package:chat_app/providers/auth_provider.dart';
 import 'package:chat_app/screens/auth/pages/login_page.dart';
-import 'package:chat_app/screens/profile/profle.dart';
+import 'package:chat_app/screens/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
