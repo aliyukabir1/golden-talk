@@ -30,12 +30,12 @@ class AuthProvider extends ChangeNotifier {
           email: email, password: password);
       final id = getCurrentUserId();
       FirebaseFirestore.instance.collection('users').doc(id).set({
-        "name": name!,
+        "name": name,
         'email': email,
         'uid': id,
-        'photoUrl': '',
-        'phoneNumber': '',
-        'aboutMe': ''
+        'photoUrl': null,
+        'phoneNumber': null,
+        'aboutMe': null
       });
       setLoading(false);
       Fluttertoast.showToast(msg: 'sign up successful');
