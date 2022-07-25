@@ -4,14 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class AuthProvider extends ChangeNotifier {
+// instances of firebase
+  final auth = FirebaseAuth.instance;
+  final firestore = FirebaseFirestore.instance;
+
+  // if i decide to add isLoading and Error
   bool _isLoading = false;
   bool _isError = false;
-
-  final instance = FirebaseAuth.instance;
-
   bool get isLoading => _isLoading;
   bool get isError => _isError;
 
+// toggles for isLoading and isError
   void setLoading(bool isloading) {
     _isLoading = isLoading;
     notifyListeners();
@@ -22,14 +25,15 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+// sign up and creating a user collection with the user id
   signUp(
       {required String email, required String password, String? name}) async {
     try {
       setLoading(true);
-      await instance.createUserWithEmailAndPassword(
+      await auth.createUserWithEmailAndPassword(
           email: email, password: password);
       final id = getCurrentUserId();
-      FirebaseFirestore.instance.collection('users').doc(id).set({
+      firestore.collection('users').doc(id).set({
         "name": name,
         'email': email,
         'uid': id,
@@ -47,11 +51,11 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+// login
   login({required String email, required String password}) async {
     try {
       setLoading(true);
-      await instance.signInWithEmailAndPassword(
-          email: email, password: password);
+      await auth.signInWithEmailAndPassword(email: email, password: password);
       setLoading(false);
       Fluttertoast.showToast(msg: 'log in up successful');
     } on FirebaseAuthException {
@@ -61,21 +65,25 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+// to check if there's a user logged in or not
   bool isLoggedIn() {
-    return instance.currentUser != null ? true : false;
+    return auth.currentUser != null ? true : false;
   }
 
+// for signing out
   Future<void> signOut() async {
-    await instance.signOut();
+    await auth.signOut();
   }
 
+// to return current user id
   String getCurrentUserId() {
-    return instance.currentUser!.uid;
+    return auth.currentUser!.uid;
   }
 
+// get the information of the current user
   Future<DocumentSnapshot> getCurrentUserInfo() async {
     final id = getCurrentUserId();
-    final data = FirebaseFirestore.instance.collection('users').doc(id).get();
+    final data = firestore.collection('users').doc(id).get();
     return data;
   }
 }
