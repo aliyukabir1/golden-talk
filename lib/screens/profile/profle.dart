@@ -59,7 +59,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      user.name == "" ? instance!.email as String : user.name,
+                      user.name ?? instance!.email as String,
                       style: const TextStyle(
                           fontSize: 20, fontWeight: FontWeight.w500),
                     ),

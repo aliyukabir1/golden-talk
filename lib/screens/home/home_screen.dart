@@ -52,17 +52,15 @@ class HomeScreen extends StatelessWidget {
                                       builder: (context) => ChatScreen(
                                             otherUserAvatar: user.photoUrl,
                                             otherUserId: user.uid,
-                                            otherUserName: user.name == ''
-                                                ? auth.currentUser!.email
-                                                    as String
-                                                : user.name,
+                                            otherUserName: user.name ??
+                                                auth.currentUser!.email
+                                                    as String,
                                           )));
                             },
                             leading: const CircleAvatar(
                                 backgroundColor: Colors.purple),
-                            title: Text(user.name == ''
-                                ? auth.currentUser!.email as String
-                                : user.name),
+                            title: Text(
+                                user.name ?? auth.currentUser!.email as String),
                             subtitle: const Text('we Got to talk'),
                             trailing: const Text('yesterday'),
                           );

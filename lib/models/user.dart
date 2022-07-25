@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
-  final String uid, name, aboutMe, phoneNumber, photoUrl;
-
+  final String uid;
+  final String? name, aboutMe, phoneNumber, photoUrl;
   UserModel(
-      {required this.photoUrl,
+      {this.photoUrl,
       required this.uid,
-      required this.name,
-      required this.aboutMe,
-      required this.phoneNumber});
+      this.name,
+      this.aboutMe,
+      this.phoneNumber});
 
   factory UserModel.fromDocument(DocumentSnapshot snapshot) {
     String photoUrl, uid, name, aboutMe, phoneNumber = '';

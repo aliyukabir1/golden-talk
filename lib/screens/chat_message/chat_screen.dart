@@ -1,5 +1,6 @@
 import 'package:chat_app/models/message.dart';
 import 'package:chat_app/providers/auth_provider.dart';
+import 'package:chat_app/providers/chat_provider.dart';
 import 'package:chat_app/screens/chat_message/components/left_text.dart';
 import 'package:chat_app/screens/chat_message/components/message_input.dart';
 import 'package:chat_app/screens/chat_message/components/right_text.dart';
@@ -7,15 +8,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/chat_provider.dart';
-
 class ChatScreen extends StatefulWidget {
-  final String otherUserId, otherUserAvatar, otherUserName;
-
+  final String otherUserId, otherUserName;
+  final String? otherUserAvatar;
   const ChatScreen(
       {Key? key,
       required this.otherUserId,
-      required this.otherUserAvatar,
+      this.otherUserAvatar,
       required this.otherUserName})
       : super(key: key);
 
