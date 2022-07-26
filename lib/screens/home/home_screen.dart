@@ -4,7 +4,6 @@ import 'package:chat_app/providers/home_provider.dart';
 import 'package:chat_app/screens/auth/pages/login_page.dart';
 import 'package:chat_app/screens/chat_message/chat_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +14,32 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final homeProvider = context.read<HomeProvider>();
     final authProvider = context.read<AuthProvider>();
-    final auth = FirebaseAuth.instance;
+
+    AlertDialog buildPopUp() {
+      return AlertDialog(
+        title: const Text('Log Out'),
+        content: const Text('Are you sure you want to log out?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('CANCEL'),
+          ),
+          TextButton(
+            onPressed: () {
+              context.read<AuthProvider>().signOut().then((value) =>
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginScreen())));
+            },
+            child: const Text('ACCEPT'),
+          ),
+        ],
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Golden Chat'),
@@ -23,8 +47,7 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (con) => const PopUp()));
+                buildPopUp();
               },
               icon: const Icon(Icons.exit_to_app))
         ],
@@ -52,17 +75,17 @@ class HomeScreen extends StatelessWidget {
                                       builder: (context) => ChatScreen(
                                             otherUserAvatar: user.photoUrl,
                                             otherUserId: user.uid,
-                                            otherUserName: user.name ??
-                                                auth.currentUser!.email
-                                                    as String,
+                                            otherUserName: user.name == ''
+                                                ? user.email
+                                                : user.name,
                                           )));
                             },
                             leading: const CircleAvatar(
                                 backgroundColor: Colors.purple),
-                            title: Text(
-                                user.name ?? auth.currentUser!.email as String),
-                            subtitle: const Text('we Got to talk'),
-                            trailing: const Text('yesterday'),
+                            title:
+                                Text(user.name == "" ? user.email : user.name),
+                            subtitle: Text(user.aboutMe),
+                            // trailing: const Text('yesterday'),
                           );
                         }
                         return const SizedBox.shrink();
@@ -84,34 +107,34 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class PopUp extends StatelessWidget {
-  const PopUp({
-    Key? key,
-  }) : super(key: key);
+// class PopUp extends StatelessWidget {
+//   const PopUp({
+//     Key? key,
+//   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Log Out'),
-      content: const Text('Are you sure you want to log out?'),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text('CANCEL'),
-        ),
-        TextButton(
-          onPressed: () {
-            context.read<AuthProvider>().signOut().then((value) =>
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LoginScreen())));
-          },
-          child: const Text('ACCEPT'),
-        ),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return AlertDialog(
+//       title: const Text('Log Out'),
+//       content: const Text('Are you sure you want to log out?'),
+//       actions: [
+//         TextButton(
+//           onPressed: () {
+//             Navigator.pop(context);
+//           },
+//           child: const Text('CANCEL'),
+//         ),
+//         TextButton(
+//           onPressed: () {
+//             context.read<AuthProvider>().signOut().then((value) =>
+//                 Navigator.pushReplacement(
+//                     context,
+//                     MaterialPageRoute(
+//                         builder: (context) => const LoginScreen())));
+//           },
+//           child: const Text('ACCEPT'),
+//         ),
+//       ],
+//     );
+//   }
+// }

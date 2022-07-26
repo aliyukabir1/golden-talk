@@ -1,23 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
-  final String uid;
-  final String? name, aboutMe, phoneNumber, photoUrl;
+  final String uid, email, name, aboutMe, phoneNumber, photoUrl;
+
   UserModel(
-      {this.photoUrl,
+      {required this.photoUrl,
+      required this.email,
       required this.uid,
-      this.name,
-      this.aboutMe,
-      this.phoneNumber});
+      required this.name,
+      required this.aboutMe,
+      required this.phoneNumber});
 
   factory UserModel.fromDocument(DocumentSnapshot snapshot) {
-    String photoUrl, uid, name, aboutMe, phoneNumber = '';
+    String photoUrl, email, uid, name, aboutMe, phoneNumber = '';
     photoUrl = snapshot.get('photoUrl');
     uid = snapshot.get('uid');
     name = snapshot.get('name');
     aboutMe = snapshot.get('aboutMe');
     phoneNumber = snapshot.get('phoneNumber');
+    email = snapshot.get('email');
     return UserModel(
+        email: email,
         uid: uid,
         name: name,
         aboutMe: aboutMe,
@@ -30,13 +33,15 @@ class UserModel {
       'name': name,
       'aboutMe': aboutMe,
       'phoneNumber': phoneNumber,
-      'photoUrl': photoUrl
+      'photoUrl': photoUrl,
+      'email': email
     };
   }
 
   copyWith(
       {String? uid,
       String? name,
+      String? email,
       String? aboutMe,
       String? phoneNumber,
       String? photoUrl}) {
@@ -45,6 +50,7 @@ class UserModel {
         uid: uid ?? this.uid,
         name: name ?? this.name,
         aboutMe: aboutMe ?? this.aboutMe,
-        phoneNumber: phoneNumber ?? this.phoneNumber);
+        phoneNumber: phoneNumber ?? this.phoneNumber,
+        email: email ?? this.email);
   }
 }

@@ -1,3 +1,4 @@
+import 'package:chat_app/core/shared_widgets/custom_button.dart';
 import 'package:chat_app/models/user.dart';
 import 'package:chat_app/providers/auth_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,63 +26,67 @@ class ProfileScreen extends StatelessWidget {
               final instance = FirebaseAuth.instance.currentUser;
               return Padding(
                 padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 30),
-                    Stack(
-                      children: [
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * .25,
-                        ),
-                        Container(
-                          width: double.infinity,
-                          height: MediaQuery.of(context).size.height * .2,
-                          decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                  colors: [Colors.blue, Colors.white],
-                                  begin: Alignment.bottomRight,
-                                  end: Alignment.topLeft)),
-                        ),
-                        const Positioned(
-                          bottom: 0,
-                          left: 10,
-                          child: CircleAvatar(
-                            backgroundColor: Colors.pink,
-                            radius: 55,
-                            child: CircleAvatar(
-                              backgroundColor: Colors.green,
-                              radius: 53,
-                            ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 30),
+                      Stack(
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * .25,
                           ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      user.name ?? instance!.email as String,
-                      style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.w500),
-                    ),
-                    const SizedBox(height: 10),
-                    const Divider(
-                      color: Color.fromARGB(255, 56, 53, 53),
-                    ),
-                    const SizedBox(height: 20),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Center(
-                        child: Text(
-                          user.aboutMe ?? 'null',
-                          style: const TextStyle(fontSize: 17),
+                          Container(
+                            width: double.infinity,
+                            height: MediaQuery.of(context).size.height * .2,
+                            decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                    colors: [Colors.blue, Colors.white],
+                                    begin: Alignment.bottomRight,
+                                    end: Alignment.topLeft)),
+                          ),
+                          const Positioned(
+                            bottom: 0,
+                            left: 10,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.pink,
+                              radius: 55,
+                              child: CircleAvatar(
+                                backgroundColor: Colors.green,
+                                radius: 53,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        user.name == "" ? instance!.email as String : user.name,
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w500),
+                      ),
+                      const SizedBox(height: 10),
+                      const Divider(
+                        color: Color.fromARGB(255, 56, 53, 53),
+                      ),
+                      const SizedBox(height: 20),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Center(
+                          child: Text(
+                            user.aboutMe == "" ? 'null' : user.aboutMe,
+                            style: const TextStyle(fontSize: 17),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 30),
+                      const CustomButton(name: 'Edit Profile')
+                    ],
+                  ),
                 ),
               );
             }

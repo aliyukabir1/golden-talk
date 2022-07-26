@@ -1,6 +1,6 @@
 import 'package:chat_app/providers/auth_provider.dart';
 import 'package:chat_app/screens/auth/pages/login_page.dart';
-import 'package:chat_app/screens/profile/profile.dart';
+import 'package:chat_app/screens/profile/edit_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +23,7 @@ class _SpachScreenState extends State<SplashScreen> {
     bool isLoggedIn = authProvider.isLoggedIn();
     if (isLoggedIn) {
       Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const ProfileScreen()));
+          MaterialPageRoute(builder: (context) => const EditProfileScreen()));
       return;
     }
     Navigator.pushReplacement(
