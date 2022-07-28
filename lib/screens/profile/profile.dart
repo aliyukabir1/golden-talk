@@ -1,6 +1,7 @@
 import 'package:chat_app/core/shared_widgets/custom_button.dart';
 import 'package:chat_app/models/user.dart';
 import 'package:chat_app/providers/auth_provider.dart';
+import 'package:chat_app/screens/profile/edit_profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class ProfileScreen extends StatelessWidget {
                                     begin: Alignment.bottomRight,
                                     end: Alignment.topLeft)),
                           ),
-                          const Positioned(
+                          Positioned(
                             bottom: 0,
                             left: 10,
                             child: CircleAvatar(
@@ -53,6 +54,7 @@ class ProfileScreen extends StatelessWidget {
                               radius: 55,
                               child: CircleAvatar(
                                 backgroundColor: Colors.green,
+                                backgroundImage: NetworkImage(user.photoUrl),
                                 radius: 53,
                               ),
                             ),
@@ -84,7 +86,16 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 30),
-                      const CustomButton(name: 'Edit Profile')
+                      CustomButton(
+                        name: 'Edit Profile',
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      EditProfileScreen(user: user)));
+                        },
+                      )
                     ],
                   ),
                 ),

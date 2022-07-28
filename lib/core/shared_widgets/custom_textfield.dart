@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
   final String? hintText;
+  final int? maxLines;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
@@ -13,11 +14,13 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType,
     this.validator,
     this.initialValue,
+    this.maxLines,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      maxLines: maxLines,
       initialValue: initialValue,
       validator: validator,
       keyboardType: keyboardType,

@@ -1,6 +1,7 @@
 import 'package:chat_app/providers/auth_provider.dart';
 import 'package:chat_app/providers/chat_provider.dart';
 import 'package:chat_app/providers/home_provider.dart';
+import 'package:chat_app/providers/profille_provider.dart';
 import 'package:chat_app/screens/splash/splash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget {
         ),
         Provider<ChatProvider>(
           create: (context) => ChatProvider(),
-        )
+        ),
+        Provider<ProfileProvider>(create: (context) => ProfileProvider())
       ],
       child: MaterialApp(
           title: 'Golden Chat',

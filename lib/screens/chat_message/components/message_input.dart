@@ -81,6 +81,7 @@ class MessageInput extends StatelessWidget {
               child: CustomTextField(
             hintText: 'Type here',
             controller: textController,
+            keyboardType: TextInputType.multiline,
           )),
           Container(
             margin: const EdgeInsets.only(left: 20),
