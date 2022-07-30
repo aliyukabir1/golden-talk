@@ -28,13 +28,14 @@ class MyApp extends StatelessWidget {
         Provider<ChatProvider>(
           create: (context) => ChatProvider(),
         ),
-        Provider<ProfileProvider>(create: (context) => ProfileProvider())
+        ChangeNotifierProvider<ProfileProvider>(
+            create: (context) => ProfileProvider())
       ],
       child: MaterialApp(
           title: 'Golden Chat',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            primarySwatch: Colors.orange,
+            primarySwatch: Colors.blueGrey,
           ),
           home: const SplashScreen()),
     );

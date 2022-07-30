@@ -19,8 +19,8 @@ class ProfileScreen extends StatelessWidget {
         title: const Text('Profile'),
         centerTitle: true,
       ),
-      body: FutureBuilder<DocumentSnapshot>(
-          future: authProvider.getCurrentUserInfo(),
+      body: StreamBuilder<DocumentSnapshot>(
+          stream: authProvider.getCurrentUserInfo(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final user = UserModel.fromDocument(snapshot.data!);
@@ -72,10 +72,17 @@ class ProfileScreen extends StatelessWidget {
                         color: Color.fromARGB(255, 56, 53, 53),
                       ),
                       const SizedBox(height: 20),
+                      Text('Phone no: ${user.phoneNumber}',
+                          style: const TextStyle(fontSize: 17)),
+                      const SizedBox(height: 20),
+                      Text('Phone no: ${user.email}',
+                          style: const TextStyle(fontSize: 17)),
+                      const SizedBox(height: 20),
                       Container(
                         width: double.infinity,
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
+                            color: Colors.blueGrey.shade200,
                             border: Border.all(color: Colors.grey),
                             borderRadius: BorderRadius.circular(10)),
                         child: Center(

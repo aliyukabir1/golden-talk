@@ -81,9 +81,9 @@ class AuthProvider extends ChangeNotifier {
   }
 
 // get the information of the current user
-  Future<DocumentSnapshot> getCurrentUserInfo() async {
+  Stream<DocumentSnapshot> getCurrentUserInfo() {
     final id = getCurrentUserId();
-    final data = firestore.collection('users').doc(id).get();
+    final data = firestore.collection('users').doc(id).snapshots();
     return data;
   }
 }
