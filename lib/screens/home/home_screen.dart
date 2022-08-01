@@ -3,6 +3,7 @@ import 'package:chat_app/providers/auth_provider.dart';
 import 'package:chat_app/providers/home_provider.dart';
 import 'package:chat_app/screens/auth/pages/login_page.dart';
 import 'package:chat_app/screens/chat_message/chat_screen.dart';
+import 'package:chat_app/screens/profile/profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,39 +16,34 @@ class HomeScreen extends StatelessWidget {
     final homeProvider = context.read<HomeProvider>();
     final authProvider = context.read<AuthProvider>();
 
-    AlertDialog buildPopUp() {
-      return AlertDialog(
-        title: const Text('Log Out'),
-        content: const Text('Are you sure you want to log out?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('CANCEL'),
-          ),
-          TextButton(
-            onPressed: () {
-              context.read<AuthProvider>().signOut().then((value) =>
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginScreen())));
-            },
-            child: const Text('ACCEPT'),
-          ),
-        ],
-      );
+    chooseAvatar(String url) {
+      if (url != '') {
+        return CircleAvatar(
+            backgroundImage: NetworkImage(url), backgroundColor: Colors.purple);
+      } else {
+        return const CircleAvatar(
+            backgroundImage: AssetImage('assets/images/profile.png'),
+            backgroundColor: Colors.purple);
+      }
     }
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Golden Chat'),
         centerTitle: true,
+        leading: IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: ((context) => const ProfileScreen())));
+            }),
         actions: [
           IconButton(
               onPressed: () {
-                buildPopUp();
+                Navigator.push(context,
+                    MaterialPageRoute(builder: ((context) => const PopUp())));
               },
               icon: const Icon(Icons.exit_to_app))
         ],
@@ -80,8 +76,7 @@ class HomeScreen extends StatelessWidget {
                                                 : user.name,
                                           )));
                             },
-                            leading: const CircleAvatar(
-                                backgroundColor: Colors.purple),
+                            leading: chooseAvatar(user.photoUrl),
                             title:
                                 Text(user.name == "" ? user.email : user.name),
                             subtitle: Text(user.aboutMe),
@@ -107,34 +102,36 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-// class PopUp extends StatelessWidget {
-//   const PopUp({
-//     Key? key,
-//   }) : super(key: key);
+class PopUp extends StatelessWidget {
+  const PopUp({
+    Key? key,
+  }) : super(key: key);
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return AlertDialog(
-//       title: const Text('Log Out'),
-//       content: const Text('Are you sure you want to log out?'),
-//       actions: [
-//         TextButton(
-//           onPressed: () {
-//             Navigator.pop(context);
-//           },
-//           child: const Text('CANCEL'),
-//         ),
-//         TextButton(
-//           onPressed: () {
-//             context.read<AuthProvider>().signOut().then((value) =>
-//                 Navigator.pushReplacement(
-//                     context,
-//                     MaterialPageRoute(
-//                         builder: (context) => const LoginScreen())));
-//           },
-//           child: const Text('ACCEPT'),
-//         ),
-//       ],
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: AlertDialog(
+        title: const Text('Log Out'),
+        content: const Text('Are you sure you want to log out?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('CANCEL'),
+          ),
+          TextButton(
+            onPressed: () {
+              context.read<AuthProvider>().signOut().then((value) =>
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginScreen())));
+            },
+            child: const Text('ACCEPT'),
+          ),
+        ],
+      ),
+    );
+  }
+}

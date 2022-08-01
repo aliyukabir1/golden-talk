@@ -32,6 +32,22 @@ class EditProfileScreen extends StatelessWidget {
       }
     }
 
+    chooseAvatar(String url) {
+      if (url != '') {
+        return CircleAvatar(
+          backgroundImage: NetworkImage(url),
+          backgroundColor: Colors.grey,
+          radius: 68,
+        );
+      } else {
+        return const CircleAvatar(
+          backgroundImage: AssetImage('assets/images/profile.png'),
+          backgroundColor: Colors.grey,
+          radius: 68,
+        );
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Profile'),
@@ -49,16 +65,11 @@ class EditProfileScreen extends StatelessWidget {
                 child: Stack(
                   children: [
                     CircleAvatar(
-                      backgroundColor: Colors.pink,
-                      radius: 70,
-                      child: context.watch<ProfileProvider>().isImageLoading
-                          ? const CircularProgressIndicator()
-                          : CircleAvatar(
-                              backgroundColor: Colors.red,
-                              backgroundImage: NetworkImage(user.photoUrl),
-                              radius: 68,
-                            ),
-                    ),
+                        backgroundColor: Colors.blue,
+                        radius: 70,
+                        child: context.watch<ProfileProvider>().isImageLoading
+                            ? const CircularProgressIndicator()
+                            : chooseAvatar(user.photoUrl)),
                     Positioned(
                         right: 10,
                         bottom: 5,
@@ -121,8 +132,6 @@ class EditProfileScreen extends StatelessWidget {
                                 .then((value) {
                               Navigator.pop(context);
                             });
-                          } else {
-                            Fluttertoast.showToast(msg: 'no changes made');
                           }
                         } catch (e) {
                           Fluttertoast.showToast(msg: e.toString());

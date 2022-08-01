@@ -89,7 +89,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       try {
                         await authProvider.signUp(
                             email: emailController.text,
-                            password: emailController.text,
+                            password: passwordController.text,
                             name: nameController.text);
                         if (!mounted) return;
                         Navigator.pushReplacement(

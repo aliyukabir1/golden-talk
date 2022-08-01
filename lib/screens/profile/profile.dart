@@ -14,6 +14,22 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final authProvider = context.read<AuthProvider>();
 
+    chooseAvatar(String url) {
+      if (url != '') {
+        return CircleAvatar(
+          backgroundImage: NetworkImage(url),
+          backgroundColor: Colors.grey,
+          radius: 53,
+        );
+      } else {
+        return const CircleAvatar(
+          backgroundImage: AssetImage('assets/images/profile.png'),
+          backgroundColor: Colors.grey,
+          radius: 53,
+        );
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
@@ -50,14 +66,9 @@ class ProfileScreen extends StatelessWidget {
                             bottom: 0,
                             left: 10,
                             child: CircleAvatar(
-                              backgroundColor: Colors.pink,
-                              radius: 55,
-                              child: CircleAvatar(
-                                backgroundColor: Colors.green,
-                                backgroundImage: NetworkImage(user.photoUrl),
-                                radius: 53,
-                              ),
-                            ),
+                                backgroundColor: Colors.pink,
+                                radius: 55,
+                                child: chooseAvatar(user.photoUrl)),
                           )
                         ],
                       ),
